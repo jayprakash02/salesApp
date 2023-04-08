@@ -6,7 +6,6 @@ class ReportingManager(models.Model):
     def __str__(self):
         return self.name
 
-
 class SalesRepresentative(models.Model):
     GENDER_CHOICES = (
         ('Male','Male'),

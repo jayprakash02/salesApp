@@ -7,7 +7,7 @@ from .serializers import (
     OrderSerializer, OrderItemSerializer
 )
 
-class PharmacyViewSet(viewsets.ModelViewSet):
+class InventoryViewSet(viewsets.ModelViewSet):
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]

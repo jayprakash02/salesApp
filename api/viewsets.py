@@ -1,10 +1,26 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
-from .models import SalesRepresentative, Store, Product, Order, OrderItem
+from .models import Pharmacy, ReportingManager, SalesRepresentative, Doctor, Store, Product, Distributor,  Order, OrderItem
 from .serializers import (
-    SalesRepresentativeSerializer, StoreSerializer, ProductSerializer,
+    PharmacySerializer, ReportingManagerSerializer,
+    SalesRepresentativeSerializer, DoctorSerializer, StoreSerializer, ProductSerializer, DistributorSerializer,
     OrderSerializer, OrderItemSerializer
 )
+
+
+class PharmacyViewSet(viewsets.ModelViewSet):
+    queryset = Pharmacy.objects.all()
+    serializer_class = PharmacySerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    filterset_fields = ['name']
+
+class ReportingManagerViewSet(viewsets.ModelViewSet):
+    queryset = ReportingManager.objects.all()
+    serializer_class = ReportingManagerSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    filterset_fields = ['name']
 
 class SalesRepresentativeViewSet(viewsets.ModelViewSet):
     queryset = SalesRepresentative.objects.all()
@@ -13,6 +29,12 @@ class SalesRepresentativeViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'email']
     filterset_fields = ['name', 'email']
 
+class DoctorViewSet(viewsets.ModelViewSet):
+    queryset = Doctor.objects.all()
+    serializer_class = DoctorSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name', 'email']
+    filterset_fields = ['name', 'email']
 
 class StoreViewSet(viewsets.ModelViewSet):
     queryset = Store.objects.all()
@@ -29,6 +51,12 @@ class ProductViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'description', 'category']
     filterset_fields = ['name', 'category']
 
+class DistributorViewSet(viewsets.ModelViewSet):
+    queryset = Distributor.objects.all()
+    serializer_class = DistributorSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    filterset_fields = ['name']
 
 class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
@@ -41,5 +69,5 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['store__name', 'sales_rep__name', 'delivery_date', 'payment_terms', 'shipping_address', 'notes']
-    filterset_fields = ['store', 'sales_rep', 'delivery_date']
+    search_fields = ['pharmacy__name', 'sales_rep__name', 'delivery_date', 'shipping_address']
+    filterset_fields = ['pharmacy', 'sales_rep', 'delivery_date']

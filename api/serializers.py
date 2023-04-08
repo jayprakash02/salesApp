@@ -24,7 +24,7 @@ class ReportingManagerSerializer(serializers.ModelSerializer):
 class SalesRepresentativeSerializer(serializers.ModelSerializer):
     class Meta:
         model = SalesRepresentative
-        fields = ['id', 'name', 'email', 'password']
+        fields = '__all__'
 
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:

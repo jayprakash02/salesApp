@@ -1,4 +1,4 @@
-from django_filters.rest_framework import DjangoFilterBackend
+ofrom django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
 from .models import Inventory, Pharmacy, ReportingManager, SalesRepresentative, Doctor, Store, Product, Distributor,  Order, OrderItem
 from .serializers import (
@@ -7,7 +7,7 @@ from .serializers import (
     OrderSerializer, OrderItemSerializer
 )
 
-class PharmacyViewSet(viewsets.ModelViewSet):
+class InventoryViewSet(viewsets.ModelViewSet):
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]

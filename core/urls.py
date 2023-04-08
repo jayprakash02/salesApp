@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from api.viewsets import (
-    PharmacyViewSet, ReportingManagerViewSet, SalesRepresentativeViewSet, DoctorViewSet,
+    InventoryViewSet, PharmacyViewSet, ReportingManagerViewSet, SalesRepresentativeViewSet, DoctorViewSet,
     StoreViewSet, ProductViewSet, DistributorViewSet, OrderViewSet, OrderItemViewSet
 )
 from django.conf import settings  
@@ -18,6 +18,7 @@ router.register(r'reporting-managers', ReportingManagerViewSet)
 router.register(r'pharmacies', PharmacyViewSet)
 router.register(r'distributors', DistributorViewSet)
 router.register(r'doctors', DoctorViewSet)
+router.register(r'inventories', InventoryViewSet)
 
 def trigger_error(request):
     division_by_zero = 1 / 0

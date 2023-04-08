@@ -34,19 +34,19 @@ class DoctorSerializer(serializers.ModelSerializer):
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
-        fields = ['id', 'name', 'address', 'phone_number', 'email', 'logo', 'sales_rep']
+        fields = '__all__'
 
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'description', 'price', 'category']
+        fields = '__all__'
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ['id', 'order', 'product', 'quantity']
+        fields = '__all__'
 
 
 class OrderSerializer(serializers.ModelSerializer):

@@ -23,10 +23,10 @@ class SalesRepresentative(models.Model):
         ('South','South'),
         ('North','North'),
     )
-    email = models.EmailField(unique=True)
-    mylab_id = models.IntegerField(unique=True)
+   # email = models.EmailField(unique=True)
+    mylab_id = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)
+    # password = models.CharField(max_length=255)
     gender = models.CharField(max_length=100,choices=GENDER_CHOICES)
     phone_number = models.CharField(max_length=20)
     whatsapp_number = models.CharField(max_length=20)
@@ -88,7 +88,7 @@ class Pharmacy(models.Model):
     whatsapp_number = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
     is_online_friendly = models.CharField(max_length=4, choices=IS_ONLINE_FRIENDLY)
-    inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE, null=True)
+    inventories = models.ManyToManyField(Inventory)
 
     def __str__(self):
         return self.name
@@ -105,12 +105,24 @@ class Store(models.Model):
     def __str__(self):
         return self.name
 
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    category = models.CharField(max_length=255)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+class CompetitorProduct(models.Model):
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, on_delete= models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -129,24 +141,23 @@ class Distributor(models.Model):
 class Order(models.Model):
     # store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='orders')
     pharmacy = models.ForeignKey(Pharmacy, on_delete=models.CASCADE)
-    product_name = models.ManyToManyField(Product)
     sales_rep = models.ForeignKey(SalesRepresentative, on_delete=models.CASCADE, related_name='orders')
-    order_book_image = models.ImageField(upload_to='order_book_images')
-    distributer = models.ForeignKey(Distributor, on_delete=models.CASCADE)
-    delivery_date = models.DateField()
+    order_book_image = models.URLField()
+    distributor = models.ForeignKey(Distributor, on_delete=models.CASCADE)
     # payment_terms = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
     # notes = models.TextField()
     order_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Order for {self.pharmacy.name} ({self.delivery_date})"
+        return f"Order for {self.pharmacy.name}"
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items', null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    units = models.IntegerField()
+    pack_size = models.IntegerField()
 
     def __str__(self):
         return f"{self.product.name} ({self.quantity})"

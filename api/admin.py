@@ -1,7 +1,13 @@
 from django.contrib import admin
-from api.models import Pharmacy, ReportingManager, SalesRepresentative, Doctor, Store, Product, Distributor, Order, OrderItem
+from api.models import Pharmacy, ReportingManager, SalesRepresentative, Doctor, Store, Product, CompetitorProduct, Category, Distributor, Order, OrderItem
 
-@admin.register
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+
+@admin.register(CompetitorProduct)
+class CompetitorProductAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
 
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
@@ -14,7 +20,7 @@ class ReportingManagerAdmin(admin.ModelAdmin):
 
 @admin.register(SalesRepresentative)
 class SalesRepresentativeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email')
+    list_display = ('id', 'name')
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
@@ -30,8 +36,8 @@ class DistributorAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'pharmacy', 'sales_rep', 'delivery_date', 'shipping_address')
+    list_display = ('id', 'pharmacy', 'sales_rep', 'shipping_address')
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('id', 'order', 'product', 'quantity')
+    list_display = ('id', 'order', 'product', 'units', 'pack_size')

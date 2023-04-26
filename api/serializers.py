@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Pharmacy, ReportingManager, Doctor, SalesRepresentative, Store, Distributor, Product, Order, OrderItem, Inventory
+from api.models import Pharmacy, Category, CompetitorProduct, ReportingManager, Doctor, SalesRepresentative, Store, Distributor, Product, Order, OrderItem, Inventory
 
 class DistributorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,12 +36,20 @@ class StoreSerializer(serializers.ModelSerializer):
         model = Store
         fields = '__all__'
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
 
+class CompetitorProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompetitorProduct
+        fields = '__all__'
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,18 +58,43 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    # order_items = OrderItemSerializer(many=True)
-
+    order_items = OrderItemSerializer(many=True)
+    sales_rep_id = serializers.PrimaryKeyRelatedField(
+                queryset=SalesRepresentative.objects.all(),
+                write_only=True,
+                required=False
+                )
+    pharmacy_id = serializers.PrimaryKeyRelatedField(
+                queryset=Pharmacy.objects.all(),
+                write_only=True,
+                required=False
+                )
+    
+    distributor_id = serializers.PrimaryKeyRelatedField(
+                queryset=Distributor.objects.all(),
+                write_only=True,
+                required=False
+                )
+    
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ('order_book_image', 'shipping_address', 'id', 'order_items', 'pharmacy', 'sales_rep',  'distributor', 'distributor_id', 'sales_rep_id', 'pharmacy_id') 
+        extra_kwargs = {
+                'shipping_address': {'write_only':True},
+                'order_book_image': {'write_only':True},
+                }
+        depth = 1
 
-    # def create(self, validated_data):
-    #     order_items_data = validated_data.pop('order_items')
-    #     order = Order.objects.create(**validated_data)
-    #     for item in order_items_data:
-    #         OrderItem.objects.create(order=order, **item)
-    #     return order
+    def create(self, validated_data):
+        order_items_data = validated_data.pop('order_items')
+        validated_data['sales_rep_id'] = validated_data['sales_rep_id'].id
+        validated_data['distributor_id'] = validated_data['distributor_id'].id
+        validated_data['pharmacy_id'] = validated_data['pharmacy_id'].id
+        order = Order.objects.create(**validated_data)
+        print(order_items_data)
+        for item in order_items_data:
+             OrderItem.objects.create(order=order, units=item.get('units'), pack_size=item.get('pack_size'), product=item.get('product'))
+        return order
 
     # def update(self, instance, validated_data):
     #     order_items_data = validated_data.pop('order_items')
@@ -82,6 +115,6 @@ class OrderSerializer(serializers.ModelSerializer):
     #     for item in order_items_data:
     #         order_item = order_items.pop(0)
     #         order_item.product = item.get('product', order_item.product)
-    #         order_item.quantity = item.get('quantity', order_item.quantity)
-    #         order_item.save()
-    #     return instance
+    #     instance.order_date = validated_data.get('order_date',instance.order_date)
+    #     instance.save()
+    #     for item in order_items_data:

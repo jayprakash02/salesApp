@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Pharmacy, ReportingManager, Doctor, SalesRepresentative, Store, Distributor, Product, Order, OrderItem, Inventory
+from api.models import Pharmacy, Category, CompetitorProduct, ReportingManager, Doctor, SalesRepresentative, Store, Distributor, Product, Order, OrderItem, Inventory
 
 class DistributorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,12 +36,20 @@ class StoreSerializer(serializers.ModelSerializer):
         model = Store
         fields = '__all__'
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
 
+class CompetitorProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompetitorProduct
+        fields = '__all__'
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:

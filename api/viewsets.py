@@ -1,10 +1,10 @@
-ofrom django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
-from .models import Inventory, Pharmacy, ReportingManager, SalesRepresentative, Doctor, Store, Product, Distributor,  Order, OrderItem
+from .models import Inventory, Pharmacy, ReportingManager, SalesRepresentative, Doctor, Store, Category, Product, CompetitorProduct, Distributor,  Order, OrderItem
 from .serializers import (
     InventorySerializer, PharmacySerializer, ReportingManagerSerializer,
     SalesRepresentativeSerializer, DoctorSerializer, StoreSerializer, ProductSerializer, DistributorSerializer,
-    OrderSerializer, OrderItemSerializer
+    OrderSerializer, OrderItemSerializer, CompetitorProductSerializer, CategorySerializer
 )
 
 class InventoryViewSet(viewsets.ModelViewSet):
@@ -32,8 +32,8 @@ class SalesRepresentativeViewSet(viewsets.ModelViewSet):
     queryset = SalesRepresentative.objects.all()
     serializer_class = SalesRepresentativeSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['name', 'email']
-    filterset_fields = ['name', 'email']
+    search_fields = ['name']
+    filterset_fields = ['name']
 
 class DoctorViewSet(viewsets.ModelViewSet):
     queryset = Doctor.objects.all()
@@ -49,6 +49,9 @@ class StoreViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'address', 'phone_number', 'email']
     filterset_fields = ['name', 'address', 'phone_number', 'email']
 
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -56,6 +59,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['name', 'description', 'category']
     filterset_fields = ['name', 'category']
+
+class CompetitorProductViewSet(viewsets.ModelViewSet):
+    queryset = CompetitorProduct.objects.all()
+    serializer_class = CompetitorProductSerializer
 
 class DistributorViewSet(viewsets.ModelViewSet):
     queryset = Distributor.objects.all()
@@ -73,7 +80,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    iserializer_class = OrderSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['pharmacy__name', 'sales_rep__name', 'delivery_date', 'shipping_address']
-    filterset_fields = ['pharmacy', 'sales_rep', 'delivery_date']
+    search_fields = ['pharmacy__name', 'sales_rep__name', 'shipping_address']
+    filterset_fields = ['pharmacy', 'sales_rep']

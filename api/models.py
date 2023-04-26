@@ -143,7 +143,7 @@ class Order(models.Model):
     pharmacy = models.ForeignKey(Pharmacy, on_delete=models.CASCADE)
     sales_rep = models.ForeignKey(SalesRepresentative, on_delete=models.CASCADE, related_name='orders')
     order_book_image = models.URLField()
-    distributer = models.ForeignKey(Distributor, on_delete=models.CASCADE)
+    distributor = models.ForeignKey(Distributor, on_delete=models.CASCADE)
     # payment_terms = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
     # notes = models.TextField()
@@ -154,9 +154,10 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items', null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    units = models.IntegerField()
+    pack_size = models.IntegerField()
 
     def __str__(self):
         return f"{self.product.name} ({self.quantity})"

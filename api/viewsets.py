@@ -80,7 +80,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
-    iserializer_class = OrderSerializer
+    serializer_class = OrderSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['pharmacy__name', 'sales_rep__name', 'shipping_address']
     filterset_fields = ['pharmacy', 'sales_rep']

@@ -1,18 +1,46 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
-from .models import SalesRepresentative, Store, Product, Order, OrderItem
+from .models import Inventory, Pharmacy, ReportingManager, SalesRepresentative, Doctor, Store, Category, Product, CompetitorProduct, Distributor,  Order, OrderItem, Working, GeoTag
 from .serializers import (
-    SalesRepresentativeSerializer, StoreSerializer, ProductSerializer,
-    OrderSerializer, OrderItemSerializer
+    InventorySerializer, PharmacySerializer, ReportingManagerSerializer,
+    SalesRepresentativeSerializer, DoctorSerializer, StoreSerializer, ProductSerializer, DistributorSerializer,
+    OrderSerializer, OrderItemSerializer, CompetitorProductSerializer, CategorySerializer, WorkingSerializer, GeoTagSerializer
 )
+
+class InventoryViewSet(viewsets.ModelViewSet):
+    queryset = Inventory.objects.all()
+    serializer_class = InventorySerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    filterset_fields = ['name']
+
+class PharmacyViewSet(viewsets.ModelViewSet):
+    queryset = Pharmacy.objects.all()
+    serializer_class = PharmacySerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    filterset_fields = ['name']
+
+class ReportingManagerViewSet(viewsets.ModelViewSet):
+    queryset = ReportingManager.objects.all()
+    serializer_class = ReportingManagerSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    filterset_fields = ['name']
 
 class SalesRepresentativeViewSet(viewsets.ModelViewSet):
     queryset = SalesRepresentative.objects.all()
     serializer_class = SalesRepresentativeSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    filterset_fields = ['name']
+
+class DoctorViewSet(viewsets.ModelViewSet):
+    queryset = Doctor.objects.all()
+    serializer_class = DoctorSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['name', 'email']
     filterset_fields = ['name', 'email']
-
 
 class StoreViewSet(viewsets.ModelViewSet):
     queryset = Store.objects.all()
@@ -21,6 +49,9 @@ class StoreViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'address', 'phone_number', 'email']
     filterset_fields = ['name', 'address', 'phone_number', 'email']
 
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -29,6 +60,16 @@ class ProductViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'description', 'category']
     filterset_fields = ['name', 'category']
 
+class CompetitorProductViewSet(viewsets.ModelViewSet):
+    queryset = CompetitorProduct.objects.all()
+    serializer_class = CompetitorProductSerializer
+
+class DistributorViewSet(viewsets.ModelViewSet):
+    queryset = Distributor.objects.all()
+    serializer_class = DistributorSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    filterset_fields = ['name']
 
 class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
@@ -41,5 +82,14 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['store__name', 'sales_rep__name', 'delivery_date', 'payment_terms', 'shipping_address', 'notes']
-    filterset_fields = ['store', 'sales_rep', 'delivery_date']
+    search_fields = ['pharmacy__name', 'sales_rep__name', 'shipping_address']
+    filterset_fields = ['pharmacy', 'sales_rep']
+
+class WorkingViewSet(viewsets.ModelViewSet):
+    queryset = Working.objects.all()
+    serializer_class = WorkingSerializer
+    
+class GeoTagViewSet(viewsets.ModelViewSet):
+    queryset = GeoTag.objects.all()
+    serializer_class = GeoTagSerializer
+        

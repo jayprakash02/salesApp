@@ -1,35 +1,38 @@
-"""core URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from api.viewsets import (
-    SalesRepresentativeViewSet, StoreViewSet, ProductViewSet,
-    OrderViewSet, OrderItemViewSet
+    InventoryViewSet, PharmacyViewSet, ReportingManagerViewSet, SalesRepresentativeViewSet, DoctorViewSet, GeoTagViewSet,
+    StoreViewSet, ProductViewSet,CategoryViewSet, CompetitorProductViewSet, DistributorViewSet, OrderViewSet, OrderItemViewSet, WorkingViewSet
 )
+from django.conf import settings  
+from django.conf.urls.static import static  
 
 router = routers.DefaultRouter()
 router.register(r'sales-representatives', SalesRepresentativeViewSet)
 router.register(r'stores', StoreViewSet)
 router.register(r'products', ProductViewSet)
+router.register(r'competitorproducts', CompetitorProductViewSet)
+router.register(r'categories', CategoryViewSet)
 router.register(r'orders', OrderViewSet)
 router.register(r'order-items', OrderItemViewSet)
+router.register(r'reporting-managers', ReportingManagerViewSet)
+router.register(r'pharmacies', PharmacyViewSet)
+router.register(r'distributors', DistributorViewSet)
+router.register(r'doctors', DoctorViewSet)
+router.register(r'inventories', InventoryViewSet)
+router.register(r'working', WorkingViewSet)
+router.register(r'geotags', GeoTagViewSet)
+
+def trigger_error(request):
+    division_by_zero = 1 / 0
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('', include(router.urls)),
+    path('sentry-debug/', trigger_error),
 ]
+
+if settings.DEBUG:  
+        urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)  
